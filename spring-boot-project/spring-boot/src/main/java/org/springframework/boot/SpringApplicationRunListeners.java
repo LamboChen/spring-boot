@@ -51,6 +51,7 @@ class SpringApplicationRunListeners {
 		this.applicationStartup = applicationStartup;
 	}
 
+	// 应用开始启动
 	void starting(ConfigurableBootstrapContext bootstrapContext, Class<?> mainApplicationClass) {
 		doWithListeners("spring.boot.application.starting",
 				(listener) -> listener.starting(bootstrapContext),
@@ -61,27 +62,33 @@ class SpringApplicationRunListeners {
 				});
 	}
 
+	// 环境准备完成
 	void environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
 		doWithListeners("spring.boot.application.environment-prepared",
 				(listener) -> listener.environmentPrepared(bootstrapContext, environment));
 	}
 
+	// 上下文准备完成
 	void contextPrepared(ConfigurableApplicationContext context) {
 		doWithListeners("spring.boot.application.context-prepared", (listener) -> listener.contextPrepared(context));
 	}
 
+	// 上下文加载完成
 	void contextLoaded(ConfigurableApplicationContext context) {
 		doWithListeners("spring.boot.application.context-loaded", (listener) -> listener.contextLoaded(context));
 	}
 
+	// 应用启动完成
 	void started(ConfigurableApplicationContext context, Duration timeTaken) {
 		doWithListeners("spring.boot.application.started", (listener) -> listener.started(context, timeTaken));
 	}
 
+	// 应用到达 ready 状态
 	void ready(ConfigurableApplicationContext context, Duration timeTaken) {
 		doWithListeners("spring.boot.application.ready", (listener) -> listener.ready(context, timeTaken));
 	}
 
+	// 应用启动失败
 	void failed(ConfigurableApplicationContext context, Throwable exception) {
 		doWithListeners("spring.boot.application.failed",
 				(listener) -> callFailedListener(listener, context, exception), (step) -> {

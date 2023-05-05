@@ -297,13 +297,18 @@ public class SpringApplication {
 	 */
 	public ConfigurableApplicationContext run(String... args) {
 		long startTime = System.nanoTime();
+		// 实例化启动上下文
 		DefaultBootstrapContext bootstrapContext = createBootstrapContext();
 		ConfigurableApplicationContext context = null;
+		// 配置 headless，服务端程序配置为 false
 		configureHeadlessProperty();
+		// 获取所有的 SpringApplicationRunListener
 		SpringApplicationRunListeners listeners = getRunListeners(args);
+		// 触发 starting 通知
 		listeners.starting(bootstrapContext, this.mainApplicationClass);
 		try {
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+			// 准备 environment
 			ConfigurableEnvironment environment = prepareEnvironment(listeners, bootstrapContext, applicationArguments);
 			Banner printedBanner = printBanner(environment);
 			context = createApplicationContext();
@@ -352,9 +357,12 @@ public class SpringApplication {
 	private ConfigurableEnvironment prepareEnvironment(SpringApplicationRunListeners listeners,
 			DefaultBootstrapContext bootstrapContext, ApplicationArguments applicationArguments) {
 		// Create and configure the environment
+		// 创建 environment
 		ConfigurableEnvironment environment = getOrCreateEnvironment();
+		// 配置 environment
 		configureEnvironment(environment, applicationArguments.getSourceArgs());
 		ConfigurationPropertySources.attach(environment);
+		// 环境准备完成，触发通知
 		listeners.environmentPrepared(bootstrapContext, environment);
 		DefaultPropertiesPropertySource.moveToEnd(environment);
 		Assert.state(!environment.containsProperty("spring.main.environment-prefix"),
@@ -462,14 +470,18 @@ public class SpringApplication {
 		return getSpringFactoriesInstances(type, null);
 	}
 
+	// 从 spring.factories 中获取实例
 	private <T> List<T> getSpringFactoriesInstances(Class<T> type, ArgumentResolver argumentResolver) {
 		return SpringFactoriesLoader.forDefaultResourceLocation(getClassLoader()).load(type, argumentResolver);
 	}
 
 	private ConfigurableEnvironment getOrCreateEnvironment() {
+		// 如果已经创建，则直接响应
 		if (this.environment != null) {
 			return this.environment;
 		}
+
+		// 创建对应类型的 environment
 		ConfigurableEnvironment environment = this.applicationContextFactory.createEnvironment(this.webApplicationType);
 		if (environment == null && this.applicationContextFactory != ApplicationContextFactory.DEFAULT) {
 			environment = ApplicationContextFactory.DEFAULT.createEnvironment(this.webApplicationType);
@@ -492,7 +504,10 @@ public class SpringApplication {
 		if (this.addConversionService) {
 			environment.setConversionService(new ApplicationConversionService());
 		}
+
+		// 添加 property source
 		configurePropertySources(environment, args);
+		// 添加 profile
 		configureProfiles(environment, args);
 	}
 
@@ -509,6 +524,7 @@ public class SpringApplication {
 			// 将 defaultProperties 追加进 sources
 			DefaultPropertiesPropertySource.addOrMerge(this.defaultProperties, sources);
 		}
+
 		// 添加命令行参数
 		if (this.addCommandLineProperties && args.length > 0) {
 			String name = CommandLinePropertySource.COMMAND_LINE_PROPERTY_SOURCE_NAME;

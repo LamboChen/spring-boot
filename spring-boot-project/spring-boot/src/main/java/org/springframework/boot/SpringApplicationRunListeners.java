@@ -35,6 +35,7 @@ import org.springframework.util.ReflectionUtils;
  * @author Andy Wilkinson
  * @author Chris Bono
  */
+// SpringApplicationRunListener 集合，简单包装了下，类似于一个广播器
 class SpringApplicationRunListeners {
 
 	private final Log log;
@@ -51,7 +52,8 @@ class SpringApplicationRunListeners {
 	}
 
 	void starting(ConfigurableBootstrapContext bootstrapContext, Class<?> mainApplicationClass) {
-		doWithListeners("spring.boot.application.starting", (listener) -> listener.starting(bootstrapContext),
+		doWithListeners("spring.boot.application.starting",
+				(listener) -> listener.starting(bootstrapContext),
 				(step) -> {
 					if (mainApplicationClass != null) {
 						step.tag("mainApplicationClass", mainApplicationClass.getName());

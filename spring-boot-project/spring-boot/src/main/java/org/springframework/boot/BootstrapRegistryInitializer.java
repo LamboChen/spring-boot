@@ -25,6 +25,7 @@ package org.springframework.boot;
  * @see SpringApplication#addBootstrapRegistryInitializer(BootstrapRegistryInitializer)
  * @see BootstrapRegistry
  */
+// 启动注册器初始化接口
 @FunctionalInterface
 public interface BootstrapRegistryInitializer {
 

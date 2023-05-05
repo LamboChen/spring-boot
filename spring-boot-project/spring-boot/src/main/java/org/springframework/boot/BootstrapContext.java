@@ -31,6 +31,7 @@ import org.springframework.core.env.Environment;
  * @author Phillip Webb
  * @since 2.4.0
  */
+// 启动上下文对象
 public interface BootstrapContext {
 
 	/**

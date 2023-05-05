@@ -51,6 +51,7 @@ import org.springframework.util.StringValueResolver;
  * @author Phillip Webb
  * @since 2.0.0
  */
+// {@link FormattingConversionService} 的专门化，默认配置了适用于大多数 Spring Boot 应用程序的转换器和格式化程序。
 public class ApplicationConversionService extends FormattingConversionService {
 
 	private static volatile ApplicationConversionService sharedInstance;

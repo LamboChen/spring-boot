@@ -26,6 +26,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @since 2.4.0
  * @see BootstrapRegistry#addCloseListener(org.springframework.context.ApplicationListener)
  */
+// BootstrapContext 关闭事件
 public class BootstrapContextClosedEvent extends ApplicationEvent {
 
 	private final ConfigurableApplicationContext applicationContext;

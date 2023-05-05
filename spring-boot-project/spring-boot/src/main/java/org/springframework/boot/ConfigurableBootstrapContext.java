@@ -26,6 +26,7 @@ package org.springframework.boot;
  * @see BootstrapContext
  * @see DefaultBootstrapContext
  */
+// 拥有配置能力的 BootstrapContext
 public interface ConfigurableBootstrapContext extends BootstrapRegistry, BootstrapContext {
 
 }

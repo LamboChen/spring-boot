@@ -33,12 +33,14 @@ import org.springframework.util.Assert;
  * @author Phillip Webb
  * @since 2.4.0
  */
+// BootstrapContext 默认实现
 public class DefaultBootstrapContext implements ConfigurableBootstrapContext {
 
 	private final Map<Class<?>, InstanceSupplier<?>> instanceSuppliers = new HashMap<>();
 
 	private final Map<Class<?>, Object> instances = new HashMap<>();
 
+	// 事件广播器
 	private final ApplicationEventMulticaster events = new SimpleApplicationEventMulticaster();
 
 	@Override
@@ -130,6 +132,7 @@ public class DefaultBootstrapContext implements ConfigurableBootstrapContext {
 	 * @param applicationContext the prepared context
 	 */
 	public void close(ConfigurableApplicationContext applicationContext) {
+		// 上下文关闭时，广播关闭事件
 		this.events.multicastEvent(new BootstrapContextClosedEvent(this, applicationContext));
 	}
 

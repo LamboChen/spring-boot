@@ -44,6 +44,8 @@ import org.springframework.util.Assert;
  * @see BootstrapContext
  * @see ConfigurableBootstrapContext
  */
+// 一个简单的对象注册表，在启动和 {@link Environment} 后处理期间可用，直至 {@link ApplicationContext} 准备就绪。
+// 意味着只用于 SpringBoot 启动阶段
 public interface BootstrapRegistry {
 
 	/**
@@ -94,6 +96,7 @@ public interface BootstrapRegistry {
 	 * @param <T> the instance type
 	 * @see Scope
 	 */
+	// 实例提供者
 	@FunctionalInterface
 	interface InstanceSupplier<T> {
 

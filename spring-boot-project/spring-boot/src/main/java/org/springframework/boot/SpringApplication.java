@@ -268,20 +268,24 @@ public class SpringApplication {
 		Assert.notNull(primarySources, "PrimarySources must not be null");
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+		// 采用 Spring SPI 机制获取
 		this.bootstrapRegistryInitializers = new ArrayList<>(
 				getSpringFactoriesInstances(BootstrapRegistryInitializer.class));
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+		// 获取主类
 		this.mainApplicationClass = deduceMainApplicationClass();
 	}
 
 	private Class<?> deduceMainApplicationClass() {
-		return StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).walk(this::findMainClass)
+		return StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
+				.walk(this::findMainClass)
 				.orElse(null);
 	}
 
 	private Optional<Class<?>> findMainClass(Stream<StackFrame> stack) {
-		return stack.filter((frame) -> Objects.equals(frame.getMethodName(), "main")).findFirst()
+		return stack.filter((frame) -> Objects.equals(frame.getMethodName(), "main"))
+				.findFirst()
 				.map(StackWalker.StackFrame::getDeclaringClass);
 	}
 
@@ -338,7 +342,9 @@ public class SpringApplication {
 	}
 
 	private DefaultBootstrapContext createBootstrapContext() {
+		// new context
 		DefaultBootstrapContext bootstrapContext = new DefaultBootstrapContext();
+		// 执行 BootstrapRegistryInitializer 初始化方法
 		this.bootstrapRegistryInitializers.forEach((initializer) -> initializer.initialize(bootstrapContext));
 		return bootstrapContext;
 	}
@@ -433,6 +439,7 @@ public class SpringApplication {
 	}
 
 	private void configureHeadlessProperty() {
+		// java.awt.headless是J2SE的一种模式，用于在缺失显示屏、鼠标或者键盘时的系统配置
 		System.setProperty(SYSTEM_PROPERTY_JAVA_AWT_HEADLESS,
 				System.getProperty(SYSTEM_PROPERTY_JAVA_AWT_HEADLESS, Boolean.toString(this.headless)));
 	}
@@ -499,8 +506,10 @@ public class SpringApplication {
 	protected void configurePropertySources(ConfigurableEnvironment environment, String[] args) {
 		MutablePropertySources sources = environment.getPropertySources();
 		if (!CollectionUtils.isEmpty(this.defaultProperties)) {
+			// 将 defaultProperties 追加进 sources
 			DefaultPropertiesPropertySource.addOrMerge(this.defaultProperties, sources);
 		}
+		// 添加命令行参数
 		if (this.addCommandLineProperties && args.length > 0) {
 			String name = CommandLinePropertySource.COMMAND_LINE_PROPERTY_SOURCE_NAME;
 			if (sources.contains(name)) {
